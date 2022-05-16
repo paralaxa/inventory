@@ -10,4 +10,5 @@ camel:
     kafka:
       valueDeserializer: sk.stopangin.saga.common.EventSerde
       valueSerializer: sk.stopangin.saga.common.EventSerde
+      headerDeserializer: org.apache.kafka.common.serialization.StringDeserializer
       brokers: localhost:9092

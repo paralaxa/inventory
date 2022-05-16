@@ -25,10 +25,8 @@ public class OrderCommandHandlerImpl implements
   private final OrderStore orderStore;
 
   @Override
-  public void create(@Header(Exchange.SAGA_LONG_RUNNING_ACTION) String lraId,
-      @Body CreateOrder createOrder) {
-    eventPublisher.publish(lraId,
-        new OrderCreated(createOrder.getId(), createOrder.getOrderedItems()));
+  public OrderCreated create(CreateOrder createOrder) {
+    return new OrderCreated(createOrder.getId(), createOrder.getOrderedItems());
   }
 
   @Override

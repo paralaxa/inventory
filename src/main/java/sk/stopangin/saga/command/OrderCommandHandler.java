@@ -1,10 +1,11 @@
 package sk.stopangin.saga.command;
 
+import sk.stopangin.saga.event.OrderCreated;
 import sk.stopangin.saga.event.PaymentUpdated;
 
 public interface OrderCommandHandler {
 
-  void create(String lraId, CreateOrder createOrder);
+  OrderCreated create(CreateOrder createOrder);
 
   void update(UpdateOrder updateOrder);
 

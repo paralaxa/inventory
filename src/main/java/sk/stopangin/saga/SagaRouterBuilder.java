@@ -30,14 +30,13 @@ public class SagaRouterBuilder extends RouteBuilder {
         .propagation(SagaPropagation.REQUIRED)
         .compensation("direct:orderCancel")
         .bean(orderCommandHandler,
-            "create");
+            "create")
+        .to("kafka:order");
 
     from(
         "kafka:paymentUpdates") //todo vsetky update k paymentu (success aj failed budu chodit cez 1 topic)
         .saga()
         .propagation(SagaPropagation.MANDATORY)
-        .to("saga:compensate")
-//        .transform(header("orderId"))
         .choice()
         .when(exchange -> Status.CANCELED == ((PaymentUpdated) exchange.getMessage()
             .getBody()).getStatus())
