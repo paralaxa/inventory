@@ -1,0 +1,13 @@
+camel:
+  service:
+    lra:
+      enabled: true
+  lra:
+    enabled: true
+    coordinator-url: http://localhost:80
+    local-participant-url: http://host.docker.internal:8182
+  component:
+    kafka:
+      valueDeserializer: sk.stopangin.saga.common.EventSerde
+      valueSerializer: sk.stopangin.saga.common.EventSerde
+      brokers: localhost:9092
