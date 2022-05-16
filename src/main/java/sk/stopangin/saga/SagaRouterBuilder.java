@@ -24,9 +24,9 @@ public class SagaRouterBuilder extends RouteBuilder {
 
     from("direct:orderCreate")
         .saga()
+        .timeout(Duration.ofSeconds(30))
         .propagation(SagaPropagation.REQUIRES_NEW)
         .completionMode(SagaCompletionMode.MANUAL)
-        .option("orderId", simple("${body.id}"))
         .propagation(SagaPropagation.REQUIRED)
         .compensation("direct:orderCancel")
         .bean(orderCommandHandler,
@@ -35,7 +35,6 @@ public class SagaRouterBuilder extends RouteBuilder {
     from(
         "kafka:paymentUpdates") //todo vsetky update k paymentu (success aj failed budu chodit cez 1 topic)
         .saga()
-        .timeout(Duration.ofSeconds(30))
         .propagation(SagaPropagation.MANDATORY)
         .to("saga:compensate")
 //        .transform(header("orderId"))
@@ -49,6 +48,10 @@ public class SagaRouterBuilder extends RouteBuilder {
         .log("Saga completed")
         .to("saga:complete")
         .end();
+
+    from("direct:orderCancel")
+        .log("Direct cancel!")
+        .to("saga:compensate");
   }
 
 

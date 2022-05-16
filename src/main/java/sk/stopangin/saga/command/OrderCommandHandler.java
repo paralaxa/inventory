@@ -4,7 +4,7 @@ import sk.stopangin.saga.event.PaymentUpdated;
 
 public interface OrderCommandHandler {
 
-  void create(CreateOrder createOrder);
+  void create(String lraId, CreateOrder createOrder);
 
   void update(UpdateOrder updateOrder);
 

@@ -2,6 +2,9 @@ package sk.stopangin.saga.command;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.camel.Body;
+import org.apache.camel.Exchange;
+import org.apache.camel.Header;
 import org.springframework.stereotype.Service;
 
 import sk.stopangin.saga.domain.Order;
@@ -22,8 +25,9 @@ public class OrderCommandHandlerImpl implements
   private final OrderStore orderStore;
 
   @Override
-  public void create(CreateOrder createOrder) {
-    eventPublisher.publish(
+  public void create(@Header(Exchange.SAGA_LONG_RUNNING_ACTION) String lraId,
+      @Body CreateOrder createOrder) {
+    eventPublisher.publish(lraId,
         new OrderCreated(createOrder.getId(), createOrder.getOrderedItems()));
   }
 
