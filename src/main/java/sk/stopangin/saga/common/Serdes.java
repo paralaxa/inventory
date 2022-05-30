@@ -8,7 +8,6 @@ import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serializer;
 import sk.stopangin.saga.domain.Order;
-import sk.stopangin.saga.event.Event;
 
 public class Serdes {
 

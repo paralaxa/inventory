@@ -2,11 +2,7 @@ package sk.stopangin.saga.command;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Body;
-import org.apache.camel.Exchange;
-import org.apache.camel.Header;
 import org.springframework.stereotype.Service;
-
 import sk.stopangin.saga.domain.Order;
 import sk.stopangin.saga.event.EventPublisher;
 import sk.stopangin.saga.event.OrderCanceled;
@@ -18,7 +14,7 @@ import sk.stopangin.saga.store.OrderStore;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class OrderCommandHandlerImpl implements
+public class DefaultOrderCommandHandler implements
     OrderCommandHandler {
 
   private final EventPublisher eventPublisher;

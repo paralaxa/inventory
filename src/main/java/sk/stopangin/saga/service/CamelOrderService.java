@@ -17,8 +17,7 @@ import sk.stopangin.saga.store.OrderStore;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService {
-
+public class CamelOrderService implements OrderService {
 
   private final ProducerTemplate producerTemplate;
 
@@ -46,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
     UpdateOrder updateOrder = new UpdateOrder();
     updateOrder.setId(id);
     updateOrder.setOrderedItems(orderedItems);
-    producerTemplate.sendBody("direct:orderCancel", updateOrder);
+    producerTemplate.sendBody("direct:orderUpdate", updateOrder);
   }
 
 

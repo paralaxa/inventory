@@ -27,10 +27,8 @@ public class SagaRouterBuilder extends RouteBuilder {
         .timeout(Duration.ofSeconds(30))
         .propagation(SagaPropagation.REQUIRES_NEW)
         .completionMode(SagaCompletionMode.MANUAL)
-        .propagation(SagaPropagation.REQUIRED)
         .compensation("direct:orderCancel")
-        .bean(orderCommandHandler,
-            "create")
+        .bean(orderCommandHandler, "create")
         .to("kafka:order");
 
     from(
