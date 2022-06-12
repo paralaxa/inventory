@@ -1,0 +1,40 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+skinparam activity {
+  BackgroundColor<< unsuccessful >> IndianRed
+  BackgroundColor<< successful >> LightGreen
+}
+
+
+  (*) --> "create \norder"
+  if order \ncreated? then
+    -->[yes] "allocate \ninventory"
+    if inventory\nallocated? then
+      -->[yes] "issue \npayment"
+      if payment \nsuccessful? then
+        -->[yes] DONE <<successful>>
+        else
+          partition "compensation operations 3" {
+            ->[no] "cancel flight (3)"
+             -> "cancel rental car (3)"
+             -> "cancel hotel (3)"
+             -> failed (3)<<unsuccessful>>
+           }
+        endif
+      else
+      partition "compensation operations 2" {
+        ->[no] "cancel inventory allocation"
+        -> "cancel order (2)"
+        -> failed (2)<<unsuccessful>>
+      }
+    endif
+  else
+    partition "compensation operations 1" {
+      ->[no] "cancel order (1)"
+      -> failed (1)<<unsuccessful>>
+    }
+  endif
+
+
+@enduml

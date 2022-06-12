@@ -1,0 +1,38 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+skinparam {
+  QueueBackgroundColor<< kafka >> DeepSkyBlue
+  QueueBackgroundColor<< camel >>  Yellow
+}
+
+actor client
+participant orderService
+participant commandHandler
+queue createOrder << camel >>
+queue order << kafka >>
+
+client -> orderService: createOrder(createOrder)
+orderService-> commandHandler: create(createOrderCommand)
+commandHandler->commandHandler: validate (createOrderCommand)
+commandHandler->createOrder: push(orderCreatedEvent)
+
+group saga
+  participant camel
+  camel->createOrder:pull(orderCreatedEvent)
+  return orderCreatedEvent
+  camel->order:push(orderCreatedEvent)
+  return ack
+  alt completition
+    camel->commandHandler:completeOrder
+    return orderUpdatedEvent
+  else compensation
+    camel->commandHandler:cancelOrder
+    return orderUpdatedEvent
+  end
+  camel->order: push(orderUpdatedEvent)
+  return ack
+end
+@enduml
