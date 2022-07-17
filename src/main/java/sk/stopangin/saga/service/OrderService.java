@@ -11,6 +11,10 @@ public interface OrderService {
 
   void addItems(String id, List<OrderedItem> orderedItems);
 
+  void addItem(OrderedItem orderedItem);
+
+  void removeItem(OrderedItem orderedItem);
+
   void cancelOrder(String orderId);
 
   Order getOrderById(String id);

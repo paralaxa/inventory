@@ -1,5 +1,6 @@
 package sk.stopangin.saga.event;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +14,5 @@ import sk.stopangin.saga.common.Status;
 public class OrderUpdated implements Event {
 
   private String id;
-  private Status status;
-  private List<OrderedItem> orderedItems;
+  private List<OrderedItem> orderedItems = new ArrayList<>();
 }

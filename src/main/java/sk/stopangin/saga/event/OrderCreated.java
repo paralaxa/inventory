@@ -12,5 +12,6 @@ import sk.stopangin.saga.common.OrderedItem;
 public class OrderCreated implements Event {
 
   private String id;
+  private String userId;
   private List<OrderedItem> orderedItems;
 }

@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import sk.stopangin.saga.domain.Order;
 import sk.stopangin.saga.event.EventPublisher;
+import sk.stopangin.saga.event.ItemAdded;
+import sk.stopangin.saga.event.ItemRemoved;
 import sk.stopangin.saga.event.OrderCanceled;
 import sk.stopangin.saga.event.OrderCreated;
 import sk.stopangin.saga.event.OrderUpdated;
@@ -22,13 +24,14 @@ public class DefaultOrderCommandHandler implements
 
   @Override
   public OrderCreated create(CreateOrder createOrder) {
-    return new OrderCreated(createOrder.getId(), createOrder.getOrderedItems());
+    return new OrderCreated(createOrder.getId(), createOrder.getUserId(),
+        createOrder.getOrderedItems());
   }
 
   @Override
   public void update(UpdateOrder updateOrder) {
     eventPublisher.publish(
-        new OrderUpdated(updateOrder.getId(), updateOrder.getStatus(),
+        new OrderUpdated(updateOrder.getUserId(),
             updateOrder.getOrderedItems()));
   }
 
@@ -36,6 +39,22 @@ public class DefaultOrderCommandHandler implements
   public void cancel(String id) {
     Order order = orderStore.getOrderById(id);
     eventPublisher.publish(new OrderCanceled(id, order.getOrderedItems()));
+  }
+
+  @Override
+  public ItemAdded add(AddItem item) {
+    ItemAdded itemAdded = new ItemAdded();
+    itemAdded.setOrderedItem(item.getOrderedItem());
+    itemAdded.setId(item.getUserId());
+    return itemAdded;
+  }
+
+  @Override
+  public ItemRemoved remove(RemoveItem item) {
+    ItemRemoved itemRemoved = new ItemRemoved();
+    itemRemoved.setOrderedItem(item.getOrderedItem());
+    itemRemoved.setId(item.getUserId());
+    return itemRemoved;
   }
 
   @Override

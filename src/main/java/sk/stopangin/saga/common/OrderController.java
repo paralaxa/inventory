@@ -9,4 +9,8 @@ public interface OrderController {
   void create(CreateOrderRequest createOrderRequest);
 
   void addItems(String id, OrderedItem orderedItem);
+
+  void addItem(OrderedItem item);
+
+  void removeItem(OrderedItem item);
 }

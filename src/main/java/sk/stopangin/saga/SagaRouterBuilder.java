@@ -8,8 +8,7 @@ import org.apache.camel.model.SagaCompletionMode;
 import org.apache.camel.model.SagaPropagation;
 import org.springframework.stereotype.Component;
 import sk.stopangin.saga.command.OrderCommandHandler;
-import sk.stopangin.saga.common.Status;
-import sk.stopangin.saga.event.PaymentUpdated;
+import sk.stopangin.saga.command.RemoveItem;
 
 @Slf4j
 @Component
@@ -31,20 +30,14 @@ public class SagaRouterBuilder extends RouteBuilder {
         .bean(orderCommandHandler, "create")
         .to("kafka:order");
 
-    from(
-        "kafka:paymentUpdates") //todo vsetky update k paymentu (success aj failed budu chodit cez 1 topic)
-        .saga()
-        .propagation(SagaPropagation.MANDATORY)
+    from("direct:orderUpdate")
         .choice()
-        .when(exchange -> Status.CANCELED == ((PaymentUpdated) exchange.getMessage()
-            .getBody()).getStatus())
-        .log("Saga compensated")
-        .to("saga:compensate")
+        .when(exchange -> exchange.getMessage().getBody() instanceof RemoveItem)
+        .bean(orderCommandHandler, "remove")
         .otherwise()
-        .bean(orderCommandHandler, "updatePayment") //todo transform na UpdateCommand
-        .log("Saga completed")
-        .to("saga:complete")
-        .end();
+        .bean(orderCommandHandler, "add")
+        .end()
+        .to("kafka:order");
 
     from("direct:orderCancel")
         .log("Direct cancel!")

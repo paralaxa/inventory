@@ -3,6 +3,7 @@ package sk.stopangin.saga.resource;
 
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,8 +37,19 @@ public class OrderControllerImpl implements OrderController {
   }
 
   @Override
-  @PostMapping("{id}/items")
   public void addItems(@PathVariable("id") String id, @RequestBody OrderedItem orderedItem) {
     orderService.addItems(id, Collections.singletonList(orderedItem));
+  }
+
+  @Override
+  @PostMapping("/items")
+  public void addItem(@RequestBody OrderedItem item) {
+    orderService.addItem(item);
+  }
+
+  @Override
+  @DeleteMapping("/items")
+  public void removeItem(@RequestBody OrderedItem item) {
+    orderService.removeItem(item);
   }
 }

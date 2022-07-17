@@ -6,9 +6,9 @@ import sk.stopangin.saga.common.OrderedItem;
 import sk.stopangin.saga.common.Status;
 
 @Data
-public class UpdateOrder implements Command{
+public class UpdateOrder implements Command {
 
-  private String id;
+  private String userId;
   private List<OrderedItem> orderedItems;
   private Status status;
 }

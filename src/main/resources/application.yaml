@@ -1,3 +1,7 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
 camel:
   service:
     lra:
